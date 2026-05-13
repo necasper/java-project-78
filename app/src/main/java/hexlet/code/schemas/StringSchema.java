@@ -4,38 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class StringSchema {
+public class StringSchema extends BaseSchema<StringSchema> {
 
-    private boolean required;
     private Integer minLength;
     private final List<String> substrs = new ArrayList<>();
 
-    public StringSchema required() {
-        this.required = true;
-        return this;
+    @Override
+    protected boolean isAbsent(Object value) {
+        return value == null || "".equals(value);
     }
 
-    public StringSchema minLength(int length) {
-        this.minLength = length;
-        return this;
-    }
-
-    public StringSchema contains(String substring) {
-        Objects.requireNonNull(substring, "substring");
-        substrs.add(substring);
-        return this;
-    }
-
-    public boolean isValid(Object data) {
-        if (!required && isBlankOrMissing(data)) {
-            return true;
-        }
-
-        if (required && isBlankOrMissing(data)) {
-            return false;
-        }
-
-        if (!(data instanceof String s)) {
+    @Override
+    protected boolean validatePresent(Object value) {
+        if (!(value instanceof String s)) {
             return false;
         }
 
@@ -52,7 +33,14 @@ public final class StringSchema {
         return true;
     }
 
-    private static boolean isBlankOrMissing(Object data) {
-        return data == null || "".equals(data);
+    public StringSchema minLength(int length) {
+        this.minLength = length;
+        return this;
+    }
+
+    public StringSchema contains(String substring) {
+        Objects.requireNonNull(substring, "substring");
+        substrs.add(substring);
+        return this;
     }
 }
