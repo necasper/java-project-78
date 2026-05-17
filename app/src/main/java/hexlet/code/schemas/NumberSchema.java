@@ -1,6 +1,6 @@
 package hexlet.code.schemas;
 
-public class NumberSchema extends BaseSchema<NumberSchema> {
+public class NumberSchema extends BaseSchema<Integer> {
 
     public NumberSchema() {
         addCheck("type", value -> value instanceof Integer);
@@ -9,6 +9,11 @@ public class NumberSchema extends BaseSchema<NumberSchema> {
     @Override
     protected boolean isAbsent(Object value) {
         return value == null;
+    }
+
+    public NumberSchema required() {
+        activateRequired();
+        return this;
     }
 
     public NumberSchema positive() {

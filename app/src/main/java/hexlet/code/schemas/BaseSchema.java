@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public abstract class BaseSchema<Self extends BaseSchema<Self>> {
+public abstract class BaseSchema<T> {
 
     protected final Map<String, Predicate<Object>> checks = new LinkedHashMap<>();
     protected boolean required;
@@ -13,10 +13,8 @@ public abstract class BaseSchema<Self extends BaseSchema<Self>> {
         checks.put(name, predicate);
     }
 
-    @SuppressWarnings("unchecked")
-    public Self required() {
+    protected final void activateRequired() {
         required = true;
-        return (Self) this;
     }
 
     public final boolean isValid(Object value) {

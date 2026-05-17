@@ -2,7 +2,7 @@ package hexlet.code.schemas;
 
 import java.util.Objects;
 
-public class StringSchema extends BaseSchema<StringSchema> {
+public class StringSchema extends BaseSchema<String> {
 
     public StringSchema() {
         addCheck("type", value -> value instanceof String);
@@ -11,6 +11,11 @@ public class StringSchema extends BaseSchema<StringSchema> {
     @Override
     protected boolean isAbsent(Object value) {
         return value == null || "".equals(value);
+    }
+
+    public StringSchema required() {
+        activateRequired();
+        return this;
     }
 
     public StringSchema minLength(int length) {
