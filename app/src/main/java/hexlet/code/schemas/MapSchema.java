@@ -5,38 +5,25 @@ import java.util.Map;
 
 public class MapSchema extends BaseSchema<MapSchema> {
 
-    private Integer expectedSize;
     private Map<String, BaseSchema<?>> shapeSchemas;
+
+    public MapSchema() {
+        addCheck("type", value -> value instanceof Map<?, ?>);
+    }
 
     @Override
     protected boolean isAbsent(Object value) {
         return value == null;
     }
 
-    @Override
-    protected boolean validatePresent(Object value) {
-        if (!(value instanceof Map<?, ?> map)) {
-            return false;
-        }
-
-        if (expectedSize != null && map.size() != expectedSize) {
-            return false;
-        }
-
-        if (!passesShapeChecks(map)) {
-            return false;
-        }
-
-        return true;
-    }
-
     public MapSchema sizeof(int size) {
-        this.expectedSize = size;
+        addCheck("sizeof", value -> value instanceof Map<?, ?> map && map.size() == size);
         return this;
     }
 
     public MapSchema shape(Map<String, BaseSchema<?>> schemas) {
-        this.shapeSchemas = new HashMap<>(schemas);
+        shapeSchemas = new HashMap<>(schemas);
+        addCheck("shape", value -> value instanceof Map<?, ?> map && passesShapeChecks(map));
         return this;
     }
 

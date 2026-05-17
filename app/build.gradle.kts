@@ -1,14 +1,9 @@
 plugins {
     id("com.github.ben-manes.versions") version "0.53.0"
-    application
+    java
     checkstyle
     jacoco
     id("org.sonarqube") version "7.3.0.8198"
-    kotlin("kapt") version "2.3.20"
-}
-
-application {
-    mainClass = "hexlet.code.App"
 }
 
 group = "hexlet.code"
@@ -25,10 +20,6 @@ repositories {
 }
 
 dependencies {
-    implementation("info.picocli:picocli:4.7.7")
-    annotationProcessor("info.picocli:picocli:4.7.7")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.3")
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -63,11 +54,5 @@ sonar {
             property("sonar.token", token)
             property("sonar.login", token)
         }
-    }
-}
-
-kapt {
-    arguments {
-        arg("project", "${project.group}/${project.name}")
     }
 }
