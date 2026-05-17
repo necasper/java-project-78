@@ -7,7 +7,7 @@ Java-библиотека для проверки данных по настра
 ---
 
 ### Тесты Hexlet и линтер
-
+ 
 [![Actions Status](https://github.com/necasper/java-project-78/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/necasper/java-project-78/actions/workflows/hexlet-check.yml)
 
 ### Сборка CI
