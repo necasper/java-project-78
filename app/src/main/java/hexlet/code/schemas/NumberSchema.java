@@ -1,18 +1,16 @@
 package hexlet.code.schemas;
 
+import java.util.Objects;
+
 public final class NumberSchema extends BaseSchema<Integer> {
 
     public NumberSchema() {
+        super(Objects::isNull);
         addCheck("type", value -> value instanceof Integer);
     }
 
-    @Override
-    protected boolean isAbsent(Object value) {
-        return value == null;
-    }
-
     public NumberSchema required() {
-        activateRequired();
+        addCheck("required", Objects::nonNull);
         return this;
     }
 

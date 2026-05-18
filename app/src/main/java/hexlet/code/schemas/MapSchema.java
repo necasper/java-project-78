@@ -2,22 +2,17 @@ package hexlet.code.schemas;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public final class MapSchema extends BaseSchema<Object> {
 
-    private Map<String, BaseSchema<?>> shapeSchemas;
-
     public MapSchema() {
+        super(Objects::isNull);
         addCheck("type", value -> value instanceof Map<?, ?>);
     }
 
-    @Override
-    protected boolean isAbsent(Object value) {
-        return value == null;
-    }
-
     public MapSchema required() {
-        activateRequired();
+        addCheck("required", Objects::nonNull);
         return this;
     }
 
@@ -27,25 +22,18 @@ public final class MapSchema extends BaseSchema<Object> {
     }
 
     public MapSchema shape(Map<String, ? extends BaseSchema<?>> schemas) {
-        shapeSchemas = new HashMap<>(schemas);
-        addCheck("shape", value -> value instanceof Map<?, ?> map && passesShapeChecks(map));
-        return this;
-    }
-
-    private boolean passesShapeChecks(Map<?, ?> map) {
-        if (shapeSchemas == null || shapeSchemas.isEmpty()) {
-            return true;
-        }
-
-        for (Map.Entry<String, BaseSchema<?>> entry : shapeSchemas.entrySet()) {
-            String key = entry.getKey();
-            BaseSchema<?> schema = entry.getValue();
-            Object nested = map.get(key);
-            if (!schema.isValid(nested)) {
+        Map<String, BaseSchema<?>> snapshot = new HashMap<>(schemas);
+        addCheck("shape", value -> {
+            if (!(value instanceof Map<?, ?> map)) {
                 return false;
             }
-        }
-
-        return true;
+            for (Map.Entry<String, BaseSchema<?>> entry : snapshot.entrySet()) {
+                if (!entry.getValue().isValid(map.get(entry.getKey()))) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        return this;
     }
 }

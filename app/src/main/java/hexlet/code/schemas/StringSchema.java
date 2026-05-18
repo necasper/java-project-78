@@ -5,16 +5,12 @@ import java.util.Objects;
 public final class StringSchema extends BaseSchema<String> {
 
     public StringSchema() {
+        super(value -> value == null || "".equals(value));
         addCheck("type", value -> value instanceof String);
     }
 
-    @Override
-    protected boolean isAbsent(Object value) {
-        return value == null || "".equals(value);
-    }
-
     public StringSchema required() {
-        activateRequired();
+        addCheck("required", value -> value instanceof String s && !s.isEmpty());
         return this;
     }
 
